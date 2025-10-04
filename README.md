@@ -206,13 +206,15 @@ Here is an example of the pipeline segmenting **"a skateboard"** and **"a cap"**
 
 ## Acknowledgements
 
-This implementation was made possible by studying the following seminal papers and high-quality open-source repositories.
+This implementations were made possible by studying the following seminal papers and high-quality open-source repositories.
 
 ### Papers
 1.  Dosovitskiy et al. (2021). AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE.
 2.  Touvron et al. (2021). Training data-efficient image transformers & distillation through attention (DeiT).
 3.  Steiner et al. (2022). How to train your ViT? Data, Augmentation, and Regularization in Vision Transformers.
 4.  Chen et al. (2022). Better plain ViT baselines for ImageNet-1k.
+5.  **Grounding DINO:** Skalski, P. (2023, March 30). *Grounding DINO: SOTA Zero-Shot Object Detection*. Roboflow Blog. [https://blog.roboflow.com/grounding-dino-zero-shot-object-detection/](https://blog.roboflow.com/grounding-dino-zero-shot-object-detection/)
+6.  **Segment Anything Model (SAM):** Skalski, P. (2024, January 22). *How to Use the Segment Anything Model (SAM)*. Roboflow Blog. [https://blog.roboflow.com/how-to-use-segment-anything-model-sam/](https://blog.roboflow.com/how-to-use-segment-anything-model-sam/)
 
 ### Repositories
 1.  Official Google Research ViT: [google-research/vision_transformer](https://github.com/google-research/vision_transformer)
