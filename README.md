@@ -10,10 +10,10 @@
    - [Methodology & Implementation](#methodology--implementation)
      - [1. Architecture](#1-architecture)
      - [2. Training Strategy](#2-training-strategy)
-     - [Ablation Study: The Indispensable Role of Batch-Level Augmentations](#ablation-study-the-indispensable-role-of-batch-level-augmentations)
-       - [Key Observations](#key-observations)
-       - [Takeaway](#takeaway)
-     - [Analysis: Key to High Performance without Pre-training](#analysis-key-to-high-performance-without-pre-training)
+   - [Ablation Study: The Indispensable Role of Batch-Level Augmentations](#ablation-study-the-indispensable-role-of-batch-level-augmentations)
+      - [Key Observations](#key-observations)
+      - [Takeaway](#takeaway)
+   - [Analysis: Key to High Performance without Pre-training](#analysis-key-to-high-performance-without-pre-training)
 2. [Text-Driven Image Segmentation with SAM 2](#text-driven-image-segmentation-with-sam-2)
    - [Pipeline Overview](#pipeline-overview)
    - [Example Result](#example-result)
@@ -115,7 +115,7 @@ The key challenge with ViTs is their data-hungriness. To overcome this on a smal
 * **Optimizer & Scheduler:** The `AdamW` optimizer was used with a `OneCycleLR` scheduler, which automatically handles a learning rate warmup phase followed by a cosine decay. This disciplined LR schedule is crucial for stable and effective training.
 
 
-### **Ablation Study: The Indispensable Role of Batch-Level Augmentations**
+## **Ablation Study: The Indispensable Role of Batch-Level Augmentations**
 
 To quantify the impact of batch-level augmentations, I ran the following experiments:
 
@@ -129,7 +129,7 @@ To quantify the impact of batch-level augmentations, I ran the following experim
 
 ---
 
-#### **Key Observations**
+### **Key Observations**
 
 1. **Baseline performance is strong:**  
    A ViT trained for 30 epochs without Mixup/CutMix achieves **73.29% test accuracy**, showing that AdamW + OneCycleLR alone produces reasonable results.  
@@ -142,14 +142,14 @@ To quantify the impact of batch-level augmentations, I ran the following experim
 
 ---
 
-#### **Takeaway**
+### **Takeaway**
 
 - **Early training may appear worse**, but batch-level augmentations are **critical for sustained performance**.  
 - Aggressive regularization strategies, even if they delay initial convergence, **unlock the full potential of ViTs on limited data** without requiring large-scale pre-training.
 
 
 
-### Analysis: Key to High Performance without Pre-training
+## Analysis: Key to High Performance without Pre-training
 
 The final test accuracy of **90.9%** demonstrates that Vision Transformers can indeed be trained effectively on smaller datasets if the right strategy is employed. The key takeaways are:
 
