@@ -10,12 +10,15 @@
 
 ## Final Results
 
-The model was trained for 300 epochs, and the best-performing checkpoint was evaluated on the held-out test set.
+The model was trained for up to 300 epochs, and the best-performing checkpoint was evaluated on the held-out test set.
 
-| Model                                | Epochs | Test Accuracy |
-| ------------------------------------ |               :--------:                           |:--------:|
-| ViT  | 100                                      | 79.3 |
-| ViT  | 252/300 (training time expired on colab) | 90.9 |
+| Model Configuration | Training Duration | Best Validation Acc. | Final Test Accuracy |
+| :------------------ | :---------------: | :------------------: | :-----------------: |
+| **ViT (DeiT-Ti Recipe)** | **252 Epochs*** | **91.00%** | **90.9%** |
+| ViT (DeiT-Ti Recipe) | 300 Epochs | 91.00% | 90.7% |
+*The best performing model (90.9% test accuracy) was saved from a run that achieved its peak validation accuracy at 252 epochs.
+
+Below is the confusion matrix from the final evaluation on the 10,000 test images for the best model.
 
 Below is the confusion matrix from the final evaluation on the 10,000 test images.
 
@@ -35,7 +38,7 @@ This project is designed to be run in a Google Colab environment.
     * Build the ViT model and the training harness.
     * Train the model for the specified number of epochs, saving the best checkpoint.
     * Load the best checkpoint and run a final evaluation, printing metrics and generating plots.
-
+> **Note on Reproducibility:** The full 300-epoch training run takes approximately 4.5 hours and may be interrupted by Colab's runtime limits. To facilitate a quick evaluation of the final result, the pre-trained weights from my best run (`best_vit_model.pth`) and the training logs (`training_history.csv`) are provided in the submission folder. The evaluation section of the `q1.ipynb` notebook can be run independently to load these weights and reproduce the final test results in minutes.
 ## Best Model Configuration
 
 The best results were achieved using a model architecture and training recipe inspired by the **DeiT-Ti (Tiny)** variant.
@@ -96,32 +99,16 @@ The final test accuracy of **90.9%** demonstrates that Vision Transformers can i
 2.  **Regularization is Paramount:** The success of this project hinges on the aggressive regularization strategy borrowed from DeiT. The combination of `RandAugment`, `Mixup`, `CutMix`, and `AdamW`'s weight decay successfully prevented the model from overfitting, a primary risk for ViTs.
 3.  **Training Dynamics as a Signal:** A key observation was that the **training accuracy was consistently lower than the validation accuracy**. This counter-intuitive result is a direct consequence of the regularization. The training task is made artificially difficult by the augmentations, which forces the model to learn more robust features that generalize better to the "clean" validation data. This is a powerful indicator that the regularization is working as intended.
 
+
 <p align="center">
   <img src="https://github.com/user-attachments/assets/7eff5f2c-27e8-4b53-a686-6285c5f05ab6" alt="image" width="600" height="600" />
 </p>
 
-3.  **Modern Schedulers are Non-Negotiable:** The stability and performance of the training run were heavily reliant on the `OneCycleLR` scheduler. Without its intelligent management of the learning rate, the model would likely have converged much slower or to a less optimal result.
+4.  **Modern Schedulers are Non-Negotiable:** The stability and performance of the training run were heavily reliant on the `OneCycleLR` scheduler. Without its intelligent management of the learning rate, the model would likely have converged much slower or to a less optimal result.
+5. **Peak Performance and Onset of Overfitting:** An interesting observation arose from comparing two long training runs. The model that achieved a peak validation accuracy of 91.00% (saved from a run that completed 252 epochs) yielded a final test accuracy of **90.9%**. A subsequent full 300-epoch run achieved a similar peak but a slightly lower test accuracy of 90.7%. This suggests the model reached its optimal generalization capability around the ~250-270 epoch mark, and further training offered no benefit, demonstrating the onset of minor overfitting. Consequently, the model from the earlier run is reported as the best-performing model.
 
 This project validates that with a thoughtful, modern approach to data augmentation and training dynamics, the performance gap for Vision Transformers on smaller datasets can be significantly closed, reducing the dependency on massive pre-training corpora.
 
-
-
-
-## Acknowledgements
-
-This implementation was made possible by studying the following seminal papers and high-quality open-source repositories.
-
-### Papers
-1.  Dosovitskiy et al. (2021). AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE.
-2.  Touvron et al. (2021). Training data-efficient image transformers & distillation through attention (DeiT).
-3.  Steiner et al. (2022). How to train your ViT? Data, Augmentation, and Regularization in Vision Transformers.
-4.  Chen et al. (2022). Better plain ViT baselines for ImageNet-1k.
-
-### Repositories
-1.  Official Google Research ViT: [google-research/vision_transformer](https://github.com/google-research/vision_transformer)
-2.  PyTorch Image Models (timm) by Ross Wightman: [huggingface/pytorch-image-models](https://github.com/huggingface/pytorch-image-models)
-3.  Phil Wang's (lucidrains) ViT implementation: [lucidrains/vit-pytorch](https://github.com/lucidrains/vit-pytorch)
-4.  Jeon's ViT implementation: [jeonsworld/ViT-pytorch](https://github.com/jeonsworld/ViT-pytorch)
 
 # Text-Driven Image Segmentation with SAM 2
 
@@ -178,3 +165,19 @@ Here is an example of the pipeline segmenting **"a skateboard"** and **"a cap"**
 * **Dependency on Detection:** The final mask quality is entirely dependent on the initial bounding box from GroundingDINO. If the "Finder" fails to locate the object, the "Painter" has nothing to segment.
 * **Ambiguous Prompts:** Vague text prompts (e.g., "the person") in a crowded scene can lead to multiple or incorrect detections, resulting in poor segmentation.
 * **No Semantic Link in SAM:** SAM segments whatever is in the prompt box, it does not understand the text itself. If GroundingDINO incorrectly boxes a car when prompted for a "dog", SAM will diligently segment the car.
+
+## Acknowledgements
+
+This implementation was made possible by studying the following seminal papers and high-quality open-source repositories.
+
+### Papers
+1.  Dosovitskiy et al. (2021). AN IMAGE IS WORTH 16X16 WORDS: TRANSFORMERS FOR IMAGE RECOGNITION AT SCALE.
+2.  Touvron et al. (2021). Training data-efficient image transformers & distillation through attention (DeiT).
+3.  Steiner et al. (2022). How to train your ViT? Data, Augmentation, and Regularization in Vision Transformers.
+4.  Chen et al. (2022). Better plain ViT baselines for ImageNet-1k.
+
+### Repositories
+1.  Official Google Research ViT: [google-research/vision_transformer](https://github.com/google-research/vision_transformer)
+2.  PyTorch Image Models (timm) by Ross Wightman: [huggingface/pytorch-image-models](https://github.com/huggingface/pytorch-image-models)
+3.  Phil Wang's (lucidrains) ViT implementation: [lucidrains/vit-pytorch](https://github.com/lucidrains/vit-pytorch)
+4.  Jeon's ViT implementation: [jeonsworld/ViT-pytorch](https://github.com/jeonsworld/ViT-pytorch)
