@@ -2,6 +2,27 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## Table of Contents
+
+1. [Vision Transformer (ViT) on CIFAR-10](#vision-transformer-vit-on-cifar-10)
+   - [Final Results](#final-results)
+   - [Best Model Configuration](#best-model-configuration)
+   - [Methodology & Implementation](#methodology--implementation)
+     - [1. Architecture](#1-architecture)
+     - [2. Training Strategy](#2-training-strategy)
+     - [Ablation Study: The Indispensable Role of Batch-Level Augmentations](#ablation-study-the-indispensable-role-of-batch-level-augmentations)
+       - [Key Observations](#key-observations)
+       - [Takeaway](#takeaway)
+     - [Analysis: Key to High Performance without Pre-training](#analysis-key-to-high-performance-without-pre-training)
+2. [Text-Driven Image Segmentation with SAM 2](#text-driven-image-segmentation-with-sam-2)
+   - [Pipeline Overview](#pipeline-overview)
+   - [Example Result](#example-result)
+   - [How to Run](#how-to-run)
+   - [Limitations](#limitations)
+3. [Acknowledgements](#acknowledgements)
+   - [Papers](#papers)
+   - [Repositories](#repositories)
+
 # Vision Transformer (ViT) on CIFAR-10
 
 
@@ -20,7 +41,6 @@ The model was trained for up to 300 epochs, and the best-performing checkpoint w
 
 Below is the confusion matrix from the final evaluation on the 10,000 test images for the best model.
 
-Below is the confusion matrix from the final evaluation on the 10,000 test images.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/8285d148-a496-46d1-a13c-8b2ae5cd9080" alt="image" width="400" height="400" />
@@ -135,7 +155,7 @@ The final test accuracy of **90.9%** demonstrates that Vision Transformers can i
 
 1. **Architecture Matters:** An initial consideration was the model size. By choosing a smaller, more efficient **DeiT-Ti** architecture `(192-dim, 12 layers)` instead of a larger ViT-Base, the model had fewer parameters `(~5M)`, making it more suitable for the limited size of the CIFAR-10 dataset and reducing the risk of overfitting.
 2.  **Regularization is Paramount:** The success of this project hinges on the aggressive regularization strategy borrowed from DeiT. The combination of `RandAugment`, `Mixup`, `CutMix`, and `AdamW`'s weight decay successfully prevented the model from overfitting, a primary risk for ViTs.
-3.  **Training Dynamics as a Signal:** A key observation was that the **training accuracy was consistently lower than the validation accuracy**. This counter-intuitive result is a direct consequence of the regularization. The training task is made artificially difficult by the augmentations, which forces the model to learn more robust features that generalize better to the "clean" validation data. This is a powerful indicator that the regularization is working as intended.
+3.  **Training Dynamics as a Signal:** A key observation was that the **training accuracy was consistently lower than the validation accuracy**. This counter-intuitive result is a direct consequence of the regularization. Regularization makes the training task artificially difficult, forcing the model to learn robust features that generalize well.
 
 
 <p align="center">
